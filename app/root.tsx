@@ -13,21 +13,26 @@ import {
 } from "@remix-run/react";
 import appStylesHref from "./app.css";
 import { getContacts } from "./data";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: appStylesHref },
 ];
 
-export const loader = async () => {
+export const loader = async ({
+  params,
+}: LoaderFunctionArgs) => {
   const contacts = await getContacts();
-  return json({ contacts });
+  let lang = params.lang
+
+  return json({ contacts, lang });
 };
 
 export default function App() {
-  const { contacts } = useLoaderData<typeof loader>();
+  const { contacts, lang = "ja" } = useLoaderData<typeof loader>();
 
   return (
-    <html lang="en">
+    <html lang="ja">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -36,9 +41,6 @@ export default function App() {
       </head>
       <body>
         <div id="sidebar">
-          <div id="detail">
-            <Outlet />
-          </div>
           <h1>Remix Contacts</h1>
           <div>
             <Form id="search-form" role="search">
@@ -72,6 +74,8 @@ export default function App() {
                         <span>★</span>
                       ) : null}
                     </Link>
+                    <Link to={`contacts/${contact.id}`}>🇺🇸</Link>
+                    <Link to={`contacts/${lang}/${contact.id}`}>🇯🇵</Link>
                   </li>
                 ))}
               </ul>
@@ -82,6 +86,9 @@ export default function App() {
             )}
 
           </nav>
+        </div>
+        <div id="detail">
+          <Outlet />
         </div>
 
         <ScrollRestoration />

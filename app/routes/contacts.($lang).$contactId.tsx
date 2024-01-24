@@ -11,14 +11,16 @@ export const loader = async ({
 }: LoaderFunctionArgs) => {
   invariant(params.contactId, "Missing contactId param");
   const contact = await getContact(params.contactId);
+  let lang = params.lang
+
   if (!contact) {
     throw new Response("Not Found", { status: 404 });
   }
-  return json({ contact });
+  return json({ contact, lang });
 };
 
 export default function Contact() {
-  const { contact } = useLoaderData<typeof loader>();
+  const { contact, lang } = useLoaderData<typeof loader>();
 
   return (
     <div id="contact">
@@ -32,9 +34,9 @@ export default function Contact() {
 
       <div>
         <h1>
-          {contact.first || contact.last ? (
+          {contact.first || contact.last || contact.jaFirst || contact.jaLast ? (
             <>
-              {contact.first} {contact.last}
+              {lang === "ja" ? `${contact.jaFirst} ${contact.jaLast}` : `${contact.first} ${contact.last}`}
             </>
           ) : (
             <i>No Name</i>
