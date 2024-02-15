@@ -1,7 +1,5 @@
 import { json } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
-import type { FunctionComponent } from "react";
-import type { ContactRecord } from "../data";
 import { getContact } from "../data";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import invariant from "tiny-invariant";
@@ -10,23 +8,25 @@ export const loader = async ({
   params,
 }: LoaderFunctionArgs) => {
   invariant(params.contactId, "Missing contactId param");
-  const contact = await getContact(params.contactId);
-  let lang = params.lang
+  const fullContact = await getContact(params.contactId);
+  const lang = params.lang
 
-  if (!contact) {
+  if (!fullContact) {
     throw new Response("Not Found", { status: 404 });
   }
-  return json({ contact, lang });
+
+  const { details, ...contact } = fullContact;
+  return json({ contact, lang, details });
 };
 
 export default function Contact() {
-  const { contact, lang } = useLoaderData<typeof loader>();
+  const { contact, details, lang } = useLoaderData<typeof loader>();
 
   return (
     <div id="contact">
       <div>
         <img
-          alt={`${contact.first} ${contact.last} avatar`}
+          alt={`${details?.en?.first} ${details?.en?.last} avatar`}
           key={contact.avatar}
           src={contact.avatar}
         />
@@ -34,14 +34,13 @@ export default function Contact() {
 
       <div>
         <h1>
-          {contact.first || contact.last || contact.jaFirst || contact.jaLast ? (
+          {details?.ja?.first || details?.ja?.last || details?.en?.first || details?.en?.last ? (
             <>
-              {lang === "ja" ? `${contact.jaFirst} ${contact.jaLast}` : `${contact.first} ${contact.last}`}
+              {lang === "ja" ? `${details?.ja?.first} ${details?.ja?.last}` : `${details?.en?.first} ${details?.en?.last}`}
             </>
           ) : (
             <i>No Name</i>
-          )}{" "}
-          <Favorite contact={contact} />
+          )}
         </h1>
 
         {contact.twitter ? (
@@ -80,25 +79,3 @@ export default function Contact() {
     </div>
   );
 }
-
-const Favorite: FunctionComponent<{
-  contact: Pick<ContactRecord, "favorite">;
-}> = ({ contact }) => {
-  const favorite = contact.favorite;
-
-  return (
-    <Form method="post">
-      <button
-        aria-label={
-          favorite
-            ? "Remove from favorites"
-            : "Add to favorites"
-        }
-        name="favorite"
-        value={favorite ? "false" : "true"}
-      >
-        {favorite ? "★" : "☆"}
-      </button>
-    </Form>
-  );
-};

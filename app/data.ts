@@ -9,14 +9,20 @@ import invariant from "tiny-invariant";
 
 type ContactMutation = {
   id?: string;
-  first?: string;
-  last?: string;
-  jaFirst?: string;
-  jaLast?: string;
   avatar?: string;
   twitter?: string;
   notes?: string;
   favorite?: boolean;
+  details?: {
+    en?: {
+      first?: string;
+      last?: string;
+    },
+    ja?: {
+      first?: string;
+      last?: string;
+    }
+  }
 };
 
 export type ContactRecord = ContactMutation & {
@@ -69,7 +75,7 @@ export async function getContacts(query?: string | null) {
   let contacts = await fakeContacts.getAll();
   if (query) {
     contacts = matchSorter(contacts, query, {
-      keys: ["first", "last", "jaFirst", "jaLast"],
+      keys: ["first", "last"],
     });
   }
   return contacts.sort(sortBy("last", "createdAt"));
@@ -101,280 +107,466 @@ export async function deleteContact(id: string) {
   {
     avatar:
       "https://sessionize.com/image/124e-400o400o2-wHVdAuNaxi8KJrgtN3ZKci.jpg",
-    first: "Shruti",
-    last: "Kapoor",
-    jaFirst: "シュルティー",
-    jaLast: "カプアー",
     twitter: "@shrutikapoor08",
+    details: {
+      en: {
+        first: "Shruti",
+        last: "Kapoor",
+      },
+      ja: {
+        first: "シュルティー",
+        last: "カプアー",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/1940-400o400o2-Enh9dnYmrLYhJSTTPSw3MH.jpg",
-    first: "Glenn",
-    last: "Reyes",
-    jaFirst: "グレン",
-    jaLast: "レイス",
     twitter: "@glnnrys",
+    details: {
+      en: {
+        first: "Glenn",
+        last: "Reyes",
+      },
+      ja: {
+        first: "グレン",
+        last: "レイス",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/9273-400o400o2-3tyrUE3HjsCHJLU5aUJCja.jpg",
-    first: "Ryan",
-    last: "Florence",
-    jaFirst: "ライアン",
-    jaLast: "フローレンス",
+    details: {
+      en: {
+        first: "Ryan",
+        last: "Florence",
+      },
+      ja: {
+        first: "ライアン",
+        last: "フローレンス",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/d14d-400o400o2-pyB229HyFPCnUcZhHf3kWS.png",
-    first: "Oscar",
-    last: "Newman",
-    jaFirst: "オスカー",
-    jaLast: "ニューマン",
     twitter: "@__oscarnewman",
+    details: {
+      en: {
+        first: "Oscar",
+        last: "Newman",
+      },
+      ja: {
+        first: "オスカー",
+        last: "ニューマン",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/fd45-400o400o2-fw91uCdGU9hFP334dnyVCr.jpg",
-    first: "Michael",
-    last: "Jackson",
-    jaFirst: "マイケル",
-    jaLast: "ジャクソン",
+    details: {
+      en: {
+        first: "Michael",
+        last: "Jackson",
+      },
+      ja: {
+        first: "マイケル",
+        last: "ジャクソン",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/b07e-400o400o2-KgNRF3S9sD5ZR4UsG7hG4g.jpg",
-    first: "Christopher",
-    last: "Chedeau",
-    jaFirst: "クリストファー",
-    jaLast: "シェドー",
     twitter: "@Vjeux",
+    details: {
+      en: {
+        first: "Christopher",
+        last: "Chedeau",
+      },
+      ja: {
+        first: "クリストファー",
+        last: "シェドー",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/262f-400o400o2-UBPQueK3fayaCmsyUc1Ljf.jpg",
-    first: "Cameron",
-    last: "Matheson",
-    jaFirst: "キャメロン",
-    jaLast: "マデソン",
     twitter: "@cmatheson",
+    details: {
+      en: {
+        first: "Cameron",
+        last: "Matheson",
+      },
+      ja: {
+        first: "キャメロン",
+        last: "マデソン",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/820b-400o400o2-Ja1KDrBAu5NzYTPLSC3GW8.jpg",
-    first: "Brooks",
-    last: "Lybrand",
-    jaFirst: "ブルックス",
-    jaLast: "リーブランド",
     twitter: "@BrooksLybrand",
+    details: {
+      en: {
+        first: "Brooks",
+        last: "Lybrand",
+      },
+      ja: {
+        first: "ブルックス",
+        last: "リーブランド",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/df38-400o400o2-JwbChVUj6V7DwZMc9vJEHc.jpg",
-    first: "Alex",
-    last: "Anderson",
-    jaFirst: "アレックス",
-    jaLast: "アンダーソン",
     twitter: "@ralex1993",
+    details: {
+      en: {
+        first: "Alex",
+        last: "Anderson",
+      },
+      ja: {
+        first: "アレックス",
+        last: "アンダーソン",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/5578-400o400o2-BMT43t5kd2U1XstaNnM6Ax.jpg",
-    first: "Kent C.",
-    last: "Dodds",
-    jaFirst: "ケント C.",
-    jaLast: "ドッズ",
     twitter: "@kentcdodds",
+    details: {
+      en: {
+        first: "Kent C.",
+        last: "Dodds",
+      },
+      ja: {
+        first: "ケント C.",
+        last: "ドッズ",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/c9d5-400o400o2-Sri5qnQmscaJXVB8m3VBgf.jpg",
-    first: "Nevi",
-    last: "Shah",
-    jaFirst: "ネヴィ",
-    jaLast: "シャー",
     twitter: "@nevikashah",
+    details: {
+      en: {
+        first: "Nevi",
+        last: "Shah",
+      },
+      ja: {
+        first: "ネヴィ",
+        last: "シャー",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/2694-400o400o2-MYYTsnszbLKTzyqJV17w2q.png",
-    first: "Andrew",
-    last: "Petersen",
-    jaFirst: "アンドリュー",
-    jaLast: "ピーターソン",
+    details: {
+      en: {
+        first: "Andrew",
+        last: "Petersen",
+      },
+      ja: {
+        first: "アンドリュー",
+        last: "ピーターソン",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/907a-400o400o2-9TM2CCmvrw6ttmJiTw4Lz8.jpg",
-    first: "Scott",
-    last: "Smerchek",
-    jaFirst: "スコット",
-    jaLast: "スメアシェック",
     twitter: "@smerchek",
+    details: {
+      en: {
+        first: "Scott",
+        last: "Smerchek",
+      },
+      ja: {
+        first: "スコット",
+        last: "スメアシェック",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/08be-400o400o2-WtYGFFR1ZUJHL9tKyVBNPV.jpg",
-    first: "Giovanni",
-    last: "Benussi",
-    jaFirst: "ジョヴァンニ",
-    jaLast: "ベノッシ",
     twitter: "@giovannibenussi",
+    details: {
+      en: {
+        first: "Giovanni",
+        last: "Benussi",
+      },
+      ja: {
+        first: "ジョヴァンニ",
+        last: "ベノッシ",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/f814-400o400o2-n2ua5nM9qwZA2hiGdr1T7N.jpg",
-    first: "Igor",
-    last: "Minar",
-    jaFirst: "イゴール",
-    jaLast: "ミネア",
     twitter: "@IgorMinar",
+    details: {
+      en: {
+        first: "Igor",
+        last: "Minar",
+      },
+      ja: {
+        first: "イゴール",
+        last: "ミネア",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/fb82-400o400o2-LbvwhTVMrYLDdN3z4iEFMp.jpeg",
-    first: "Brandon",
-    last: "Kish",
-    jaFirst: "ブランドン",
-    jaLast: "キッシュ",
+    details: {
+      en: {
+        first: "Brandon",
+        last: "Kish",
+      },
+      ja: {
+        first: "ブランドン",
+        last: "キッシュ",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/fcda-400o400o2-XiYRtKK5Dvng5AeyC8PiUA.png",
-    first: "Arisa",
-    last: "Fukuzaki",
-    jaFirst: "有彩",
-    jaLast: "福﨑",
     twitter: "@arisa_dev",
+    details: {
+      en: {
+        first: "Arisa",
+        last: "Fukuzaki",
+      },
+      ja: {
+        first: "有彩",
+        last: "福﨑",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/c8c3-400o400o2-PR5UsgApAVEADZRixV4H8e.jpeg",
-    first: "Alexandra",
-    last: "Spalato",
-    jaFirst: "アレクサンドラ",
-    jaLast: "スパラト",
     twitter: "@alexadark",
+    details: {
+      en: {
+        first: "Alexandra",
+        last: "Spalato",
+      },
+      ja: {
+        first: "アレクサンドラ",
+        last: "スパラト",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/7594-400o400o2-hWtdCjbdFdLgE2vEXBJtyo.jpg",
-    first: "Cat",
-    last: "Johnson",
-    jaFirst: "キャット",
-    jaLast: "ジョンソン",
+    details: {
+      en: {
+        first: "Cat",
+        last: "Johnson",
+      },
+      ja: {
+        first: "キャット",
+        last: "ジョンソン",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/5636-400o400o2-TWgi8vELMFoB3hB9uPw62d.jpg",
-    first: "Ashley",
-    last: "Narcisse",
-    jaFirst: "アシュリー",
-    jaLast: "ナッシス",
     twitter: "@_darkfadr",
+    details: {
+      en: {
+        first: "Ashley",
+        last: "Narcisse",
+      },
+      ja: {
+        first: "アシュリー",
+        last: "ナッシス",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/6aeb-400o400o2-Q5tAiuzKGgzSje9ZsK3Yu5.JPG",
-    first: "Edmund",
-    last: "Hung",
-    jaFirst: "エドムンド",
-    jaLast: "ハン",
     twitter: "@_edmundhung",
+    details: {
+      en: {
+        first: "Edmund",
+        last: "Hung",
+      },
+      ja: {
+        first: "エドムンド",
+        last: "ハン",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/30f1-400o400o2-wJBdJ6sFayjKmJycYKoHSe.jpg",
-    first: "Clifford",
-    last: "Fajardo",
-    jaFirst: "クリフォード",
-    jaLast: "ファハルド",
     twitter: "@cliffordfajard0",
+    details: {
+      en: {
+        first: "Clifford",
+        last: "Fajardo",
+      },
+      ja: {
+        first: "クリフォード",
+        last: "ファハルド",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/6faa-400o400o2-amseBRDkdg7wSK5tjsFDiG.jpg",
-    first: "Erick",
-    last: "Tamayo",
-    jaFirst: "エリック",
-    jaLast: "タマヨ",
     twitter: "@ericktamayo",
+    details: {
+      en: {
+        first: "Erick",
+        last: "Tamayo",
+      },
+      ja: {
+        first: "エリック",
+        last: "タマヨ",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/feba-400o400o2-R4GE7eqegJNFf3cQ567obs.jpg",
-    first: "Paul",
-    last: "Bratslavsky",
-    jaFirst: "パウル",
-    jaLast: "ブラッツラヴィスキー",
     twitter: "@codingthirty",
+    details: {
+      en: {
+        first: "Paul",
+        last: "Bratslavsky",
+      },
+      ja: {
+        first: "パウル",
+        last: "ブラッツラヴィスキー",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/c315-400o400o2-spjM5A6VVfVNnQsuwvX3DY.jpg",
-    first: "Pedro",
-    last: "Cattori",
-    jaFirst: "ペドロ",
-    jaLast: "カトーリ",
     twitter: "@pcattori",
+    details: {
+      en: {
+        first: "Pedro",
+        last: "Cattori",
+      },
+      ja: {
+        first: "ペドロ",
+        last: "カトーリ",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/eec1-400o400o2-HkvWKLFqecmFxLwqR9KMRw.jpg",
-    first: "Andre",
-    last: "Landgraf",
-    jaFirst: "アンドレ",
-    jaLast: "ラングラフ",
     twitter: "@AndreLandgraf94",
+    details: {
+      en: {
+        first: "Andre",
+        last: "Landgraf",
+      },
+      ja: {
+        first: "アンドレ",
+        last: "ラングラフ",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/c73a-400o400o2-4MTaTq6ftC15hqwtqUJmTC.jpg",
-    first: "Monica",
-    last: "Powell",
-    jaFirst: "モニカ",
-    jaLast: "パワエル",
     twitter: "@indigitalcolor",
+    details: {
+      en: {
+        first: "Monica",
+        last: "Powell",
+      },
+      ja: {
+        first: "モニカ",
+        last: "パウエル",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/cef7-400o400o2-KBZUydbjfkfGACQmjbHEvX.jpeg",
-    first: "Brian",
-    last: "Lee",
-    jaFirst: "ブランアン",
-    jaLast: "リー",
     twitter: "@brian_dlee",
+    details: {
+      en: {
+        first: "Brian",
+        last: "Lee",
+      },
+      ja: {
+        first: "ブランアン",
+        last: "リー",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/f83b-400o400o2-Pyw3chmeHMxGsNoj3nQmWU.jpg",
-    first: "Sean",
-    last: "McQuaid",
-    jaFirst: "ショーン",
-    jaLast: "マクワイド",
     twitter: "@SeanMcQuaidCode",
+    details: {
+      en: {
+        first: "Sean",
+        last: "McQuaid",
+      },
+      ja: {
+        first: "ショーン",
+        last: "マクワイド",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/a9fc-400o400o2-JHBnWZRoxp7QX74Hdac7AZ.jpg",
-    first: "Shane",
-    last: "Walker",
-    jaFirst: "シェーン",
-    jaLast: "ウォーカー",
     twitter: "@swalker326",
+    details: {
+      en: {
+        first: "Shane",
+        last: "Walker",
+      },
+      ja: {
+        first: "シェーン",
+        last: "ウォーカー",
+      }
+    },
   },
   {
     avatar:
       "https://sessionize.com/image/6644-400o400o2-aHnGHb5Pdu3D32MbfrnQbj.jpg",
-    first: "Jon",
-    last: "Jensen",
-    jaFirst: "ジョン",
-    jaLast: "ジェンセン",
     twitter: "@jenseng",
+    details: {
+      en: {
+        first: "Jon",
+        last: "Jensen",
+      },
+      ja: {
+        first: "ジョン",
+        last: "ジェンセン",
+      }
+    },
   },
 ].forEach((contact) => {
   fakeContacts.create({
     ...contact,
-    id: `${contact.first.toLowerCase()}-${contact.last.toLocaleLowerCase()}`,
+    id: `${contact.details?.en.first.toLowerCase()}-${contact.details?.en.last.toLocaleLowerCase()}`,
   });
 });

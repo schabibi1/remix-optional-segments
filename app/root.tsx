@@ -1,4 +1,4 @@
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
   Form,
@@ -13,7 +13,6 @@ import {
 } from "@remix-run/react";
 import appStylesHref from "./app.css";
 import { getContacts } from "./data";
-import type { LoaderFunctionArgs } from "@remix-run/node";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: appStylesHref },
@@ -22,17 +21,16 @@ export const links: LinksFunction = () => [
 export const loader = async ({
   params,
 }: LoaderFunctionArgs) => {
-  const contacts = await getContacts();
-  let lang = params.lang
-
-  return json({ contacts, lang });
+  const fullContact = await getContacts();
+  const lang = params.lang
+  return json({ fullContact, lang });
 };
 
 export default function App() {
-  const { contacts, lang = "ja" } = useLoaderData<typeof loader>();
+  let { fullContact, lang } = useLoaderData<typeof loader>();
 
   return (
-    <html lang="ja">
+    <html lang={lang}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -58,26 +56,20 @@ export default function App() {
             </Form>
           </div>
           <nav>
-            {contacts.length ? (
+            {fullContact.length ? (
               <ul>
-                {contacts.map((contact) => (
-                  <li key={contact.id}>
-                    <Link to={`contacts/${contact.id}`}>
-                      {contact.first || contact.last ? (
-                        <>
-                          {contact.first} {contact.last}
-                        </>
-                      ) : (
-                        <i>No Name</i>
-                      )}{" "}
-                      {contact.favorite ? (
-                        <span>★</span>
-                      ) : null}
-                    </Link>
-                    <Link to={`contacts/${contact.id}`}>🇺🇸</Link>
-                    <Link to={`contacts/${lang}/${contact.id}`}>🇯🇵</Link>
-                  </li>
-                ))}
+                {fullContact.map((contact) => {
+                  return (
+                    <li key={contact.id}>
+                      <Link to={`contacts/${contact.id}`}>
+                        {contact.details?.en?.first} {contact.details?.en?.last}
+                      </Link>
+                      {/* 🗒️ TODO: Add global header component 🗒️ */}
+                      <Link to={`contacts/${contact.id}`}>🇺🇸</Link>
+                      <Link to={`${lang = "ja"}/contacts/${contact.id}`}>🇯🇵</Link>
+                    </li>
+                  )
+                })}
               </ul>
             ) : (
               <p>

@@ -1,38 +1,7 @@
-# Welcome to Remix!
+# Remix Optional Segments Example
+This is an example of how to use the optional segments feature of Remix.
+As this example focuses on the Optional Segments feature, it doesn't have further features from Remix Tutorial, ["Data Mutations"](https://remix.run/docs/en/main/start/tutorial#data-mutations) section and the rest of the tutorial features.
 
-- [Remix Docs](https://remix.run/docs)
-
-## Development
-
-From your terminal:
-
-```sh
-npm run dev
-```
-
-This starts your app in development mode, rebuilding assets on file changes.
-
-## Deployment
-
-First, build your app for production:
-
-```sh
-npm run build
-```
-
-Then run the app in production mode:
-
-```sh
-npm start
-```
-
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `remix build`
-
-- `build/`
-- `public/build/`
+# How it should work
+- Select 🇯🇵 on the UI → You'll see localized names in Japanese with `ja` slug in the URL
+- Select 🇺🇸 on the UI → You'll see default language names in English without default language slug in the URL
