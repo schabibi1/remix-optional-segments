@@ -1,8 +1,10 @@
 import { Link, useLocation, useParams } from "@remix-run/react";
+import { getLang } from "~/utils";
 
 export default function Header() {
   const { pathname } = useLocation();
-  const { lang } = useParams<{ lang?: string }>();
+  const params = useParams();
+  const lang = getLang(params);
 
   return (
     <div id="header">
