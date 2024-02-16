@@ -1,32 +1,23 @@
-import { json, LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import { LinksFunction } from "@remix-run/node";
 import {
-  Link,
   Links,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
+  useParams,
 } from "@remix-run/react";
 import appStylesHref from "./app.css";
-import { getContacts } from "./data";
-import Header from "./components/Header";
+import { getLang } from "./utils";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: appStylesHref },
 ];
 
-export const loader = async ({
-  params,
-}: LoaderFunctionArgs) => {
-  const fullContact = await getContacts();
-  const lang = params.lang
-  return json({ fullContact, lang });
-};
-
 export default function App() {
-  const { fullContact, lang } = useLoaderData<typeof loader>();
+  const params = useParams();
+  const lang = getLang(params);
 
   return (
     <html lang={lang}>
@@ -37,35 +28,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Header />
-        <div id="wrapper">
-          <div id="sidebar">
-            <h1>{lang === "ja" ? `Remix コンタクト` : `Remix Contacts`}</h1>
-            <nav>
-              {fullContact.length ? (
-                <ul>
-                  {fullContact.map((contact) => {
-                    return (
-                      <li key={contact.id}>
-                        <Link to={`contacts/${contact.id}`}>
-                          {lang === "ja" ? contact.details?.ja?.first : contact.details?.en?.first} {lang === "ja" ? contact.details?.ja?.last : contact.details?.en?.last}
-                        </Link>
-                      </li>
-                    )
-                  })}
-                </ul>
-              ) : (
-                <p>
-                  <i>No contacts</i>
-                </p>
-              )}
-            </nav>
-          </div>
-          <div id="detail">
-            <Outlet />
-          </div>
-        </div>
-
+        <Outlet />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
