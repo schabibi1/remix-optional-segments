@@ -24,6 +24,7 @@ code {
 html,
 body {
   height: 100%;
+  width: 100%;
   margin: 0;
   line-height: 1.5;
   color: #121212;
@@ -103,10 +104,38 @@ form[action$="destroy"] button {
   border-width: 0;
 }
 
-body {
+#wrapper {
   display: flex;
   height: 100%;
   width: 100%;
+}
+
+#header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: #f7f7f7;
+  border-bottom: solid 1px #e3e3e3;
+  width: 100%;
+}
+
+#header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+#header nav {
+  display: flex;
+  flex-direction: row;
+  font-size: 2rem;
+}
+
+#header nav a {
+  text-decoration: none;
+  padding: 0rem 0.5rem;
 }
 
 #sidebar {
@@ -114,7 +143,7 @@ body {
   background-color: #f7f7f7;
   border-right: solid 1px #e3e3e3;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
 }
 
 #sidebar>* {
@@ -129,10 +158,10 @@ body {
   align-items: center;
   margin: 0;
   padding: 1rem 2rem;
-  border-top: 1px solid #e3e3e3;
+  border-bottom: 1px solid #e3e3e3;
   order: 1;
   line-height: 1;
-  width: max-content;
+  width: auto;
 }
 
 #sidebar h1::before {
