@@ -3,56 +3,40 @@ import { useLoaderData } from "@remix-run/react";
 import { getContact } from "../data";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import invariant from "tiny-invariant";
+import { getLang } from "~/utils";
 
-export const loader = async ({
-  params,
-}: LoaderFunctionArgs) => {
+export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.contactId, "Missing contactId param");
+  const lang = getLang(params);
   const singleContact = await getContact(params.contactId);
-  const lang = params.lang
 
   if (!singleContact) {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const { details, ...contact } = singleContact;
-  return json({ contact, lang, details });
+  const { avatar, twitter, notes, details } = singleContact;
+  const name = `${details?.[lang]?.first} ${details?.[lang]?.last}`;
+  return json({ avatar, twitter, notes, name });
 };
 
 export default function Contact() {
-  const { contact, details, lang } = useLoaderData<typeof loader>();
+  const { avatar, twitter, notes, name } = useLoaderData<typeof loader>();
   return (
     <div id="contact">
       <div>
-        <img
-          alt={`${details?.en?.first} ${details?.en?.last} avatar`}
-          key={contact.avatar}
-          src={contact.avatar}
-        />
+        <img alt={`${name} avatar`} key={avatar} src={avatar} />
       </div>
 
       <div>
-        <h1>
-          {details?.ja?.first || details?.ja?.last || details?.en?.first || details?.en?.last ? (
-            <>
-              {lang === "ja" ? `${details?.ja?.first} ${details?.ja?.last}` : `${details?.en?.first} ${details?.en?.last}`}
-            </>
-          ) : (
-            <i>No Name</i>
-          )}
-        </h1>
+        <h1>{name}</h1>
 
-        {contact.twitter ? (
+        {twitter ? (
           <p>
-            <a
-              href={`https://twitter.com/${contact.twitter}`}
-            >
-              {contact.twitter}
-            </a>
+            <a href={`https://twitter.com/${twitter}`}>{twitter}</a>
           </p>
         ) : null}
 
-        {contact.notes ? <p>{contact.notes}</p> : null}
+        {notes ? <p>{notes}</p> : null}
       </div>
     </div>
   );
