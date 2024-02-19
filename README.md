@@ -5,3 +5,14 @@ As this example focuses on the Optional Segments feature, it doesn't have furthe
 # How it should work
 - Select 🇯🇵 on the UI → You'll see localized names in Japanese with `ja` slug in the URL
 - Select 🇺🇸 on the UI → You'll see default language names in English without default language slug in the URL
+
+![](./public/optional-segments-preview.gif)
+
+# How to test it locally
+1. Fork and clone the repo
+2. `npm i`
+3. `npm run dev`
+4. Open `http://localhost:3000/contacts` in your browser
+
+> [!NOTE]
+> If you want to change localized data (names, etc), you can find them in `app/data.ts`.
