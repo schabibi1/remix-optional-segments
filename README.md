@@ -16,3 +16,8 @@ As this example focuses on the Optional Segments feature, it doesn't have furthe
 
 > [!NOTE]
 > If you want to change localized data (names, etc), you can find them in `app/data.ts`.
+
+# Contributing
+If you're interested in contributing code to this project, please create a new issue or a PR.
+You can see the example PR from Brooks: [PR#1](https://github.com/schabibi1/remix-optional-segments/pull/1)
+(Thank you [Brooks](https://github.com/brookslybrand) for reviewing the code and creating the PR! 🙌)
