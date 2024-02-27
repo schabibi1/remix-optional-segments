@@ -3,7 +3,10 @@ import { Params } from "@remix-run/react";
 export function getLang(params: Params<string>) {
   const lang = params.lang ?? "en";
   if (lang !== "ja" && lang !== "en") {
-    throw new Error(`Invalid language ${lang}`);
+    throw new Response(null, {
+      status: 404,
+      statusText: `Not Found: Invalid language ${lang}`,
+    });
   }
   return lang;
 }
